@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=RainEffect
+comment0.text=\r\n\ Will\ rain\ and\ cause\ downpour\r\n\ \r\n\ Rain\ causes\ cars\ to\ slow\ down\ (so\ they\ can\ avoid\ driving\ accidents)\r\n
+comment1.params=
+comment1.target=RainEffect()
+comment2.params=w
+comment2.target=void\ addedToWorld(greenfoot.World)
+comment3.params=
+comment3.target=void\ act()
+comment4.params=width\ height\ density
+comment4.target=greenfoot.GreenfootImage\ drawSand(int,\ int,\ int)
+comment4.text=\r\n\ density\ should\ be\ 1-100.\ 100\ will\ be\ almost\ completely\ white\r\n
+numComments=5
