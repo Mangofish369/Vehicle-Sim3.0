@@ -6,7 +6,7 @@ import java.util.ArrayList;
  */
 public class Ambulance extends Vehicle
 {
-    public static final int HEAL_IMAGE_DURATION = 200;
+    public static final int HEAL_IMAGE_DURATION = 150;
     SimpleTimer timer = new SimpleTimer();
     HealEffect healEffect;
     public Ambulance(VehicleSpawner origin){

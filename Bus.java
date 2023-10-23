@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Bus extends Vehicle
 {
     public static final int STOP_DURATION = 1000;
-    SimpleTimer stop = new SimpleTimer();
+    SimpleTimer stop;
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         
@@ -15,6 +15,8 @@ public class Bus extends Vehicle
         speed = maxSpeed;
         // because the Bus graphic is tall, offset it a up (this may result in some collision check issues)
         yOffset = 15;
+        
+        stop = new SimpleTimer();
     }
 
     /**
