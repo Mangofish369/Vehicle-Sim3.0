@@ -8,6 +8,7 @@ public class Bus extends Vehicle
 {
     public static final int STOP_DURATION = 1000;
     SimpleTimer stop;
+    ArrayList <Pedestrian> hitbox; 
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         
@@ -18,6 +19,8 @@ public class Bus extends Vehicle
         yOffset = 15;
         
         stop = new SimpleTimer();
+        
+        hitbox = new ArrayList <Pedestrian>();
     }
 
     /**
@@ -37,19 +40,18 @@ public class Bus extends Vehicle
         
     }
     public void generateHitbox(){
-        if(direction == 1){
-            
-        }
-    }
-    public boolean checkHitPedestrian(){
         Pedestrian pFront = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Pedestrian.class);
         Pedestrian pTop = (Pedestrian)getOneObjectAtOffset(-4+(int)speed + getImage().getWidth()/2, getImage().getHeight()/2, Pedestrian.class);
         Pedestrian pBottom = (Pedestrian)getOneObjectAtOffset(-4+(int)speed + getImage().getWidth()/2, getImage().getHeight()/2, Pedestrian.class);
-        
-        ArrayList <Pedestrian> hitbox = new ArrayList <Pedestrian>();
-        hitbox.add(pFront);
-        hitbox.add(pTop);
-        hitbox.add(pBottom);
+        if(direction == 1){
+            hitbox.add(pFront);
+            hitbox.add(pTop);
+        } else if (direction == -1){
+            hitbox.add(pFront);
+            hitbox.add(pBottom);
+        }
+    }
+    public boolean checkHitPedestrian(){
         for(Pedestrian p : hitbox){
             if(p!= null && p.isAwake()){
                 System.out.println("here");

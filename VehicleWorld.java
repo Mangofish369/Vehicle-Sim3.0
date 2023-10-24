@@ -69,7 +69,14 @@ public class VehicleWorld extends World
     
     StopLine leftToRight = new StopLine();
     StopLine rightToLeft = new StopLine();
+
     
+    
+    public static final int RED_LIGHT_DURATION = 300;
+    public static final int YELLOW_LIGHT_DURATION = 100;
+    public static final int GREEN_LIGHT_DURATION = 1000;
+    
+    SimpleTimer changeLightTime = new SimpleTimer();
     
     
     /**
@@ -140,12 +147,6 @@ public class VehicleWorld extends World
 
     public void act () {
         actCount++;
-        if(Greenfoot.isKeyDown("w")){
-            bottom.changeLight("red");
-        }
-        if(Greenfoot.isKeyDown("e")){
-            bottom.changeLight("green");
-        } 
         if(crime){
             timer++;
         }
@@ -213,6 +214,11 @@ public class VehicleWorld extends World
             
             nextRainEffectAct = actCount + actsUntilNextStorm; // Next spawn interval determined 
         }
+    }
+    
+    public String checkLight(){
+        String light = top.getColour();
+        return light;
     }
     
 

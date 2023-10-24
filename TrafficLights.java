@@ -15,21 +15,18 @@ public class TrafficLights extends Actor
     }
     public void act(){
         if(Greenfoot.isKeyDown("w")){
-            changeLight("red");
-        }
-        if(Greenfoot.isKeyDown("e")){
-            changeLight("green");
+            changeLight();
         }   
     }
-    public void changeLight(String colour){
-        if(colour.equals("red")){
+    public void changeLight(){
+        if(getColour().equals("red")){
+            traffic = green;
+        }
+        else if (getColour().equals("yellow")){
             traffic = red;
         }
-        else if (colour.equals("yellow")){
-            traffic = yellow;
-        }
-        else if (colour.equals("green")){
-            traffic  = green;
+        else if (getColour().equals("green")){
+            traffic  = yellow;
         }
         traffic.scale(50,100);
         setRotation(-90);
