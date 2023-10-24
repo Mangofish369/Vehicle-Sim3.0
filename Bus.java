@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.ArrayList;
 
 /**
  * The Bus subclass
@@ -35,13 +36,37 @@ public class Bus extends Vehicle
         }
         
     }
-    public void multicollision(){
-        Pedestrian pFront = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Pedestrian.class);
-        Pedestrian pLeft = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, getImage().getHeight()/-2, Pedestrian.class);
-        Pedestrian pRight = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, getImage().getHeight()/2, Pedestrian.class);
-        
+    public void generateHitbox(){
+        if(direction == 1){
+            
+        }
     }
-    public boolean checkHitPedestrian () {
+    public boolean checkHitPedestrian(){
+        Pedestrian pFront = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Pedestrian.class);
+        Pedestrian pTop = (Pedestrian)getOneObjectAtOffset(-4+(int)speed + getImage().getWidth()/2, getImage().getHeight()/2, Pedestrian.class);
+        Pedestrian pBottom = (Pedestrian)getOneObjectAtOffset(-4+(int)speed + getImage().getWidth()/2, getImage().getHeight()/2, Pedestrian.class);
+        
+        ArrayList <Pedestrian> hitbox = new ArrayList <Pedestrian>();
+        hitbox.add(pFront);
+        hitbox.add(pTop);
+        hitbox.add(pBottom);
+        for(Pedestrian p : hitbox){
+            if(p!= null && p.isAwake()){
+                System.out.println("here");
+                if(p instanceof Walker){
+                    getWorld().removeObject(p);
+                    moving = false;
+                    stop.mark();
+                    return true;
+                } else if (p instanceof Biker){
+                    p.knockDown();
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+    public boolean multicollision () {
         Pedestrian p = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Pedestrian.class);
         Walker w = (Walker)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Walker.class);
         Biker b = (Biker)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Biker.class);
@@ -50,6 +75,7 @@ public class Bus extends Vehicle
                 getWorld().removeObject(p);
                 moving = false;
                 stop.mark();
+                return true;
             }
             else if(b!= null){
                 p.knockDown();

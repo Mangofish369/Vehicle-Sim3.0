@@ -19,7 +19,7 @@ public abstract class Vehicle extends SuperSmoothMover
     protected int myLaneNumber;
     protected boolean isRaining;
     SimpleTimer cooldown;
-    public static final int CHANGE_LANE_COOLDOWN = 10000;
+    public static final int CHANGE_LANE_COOLDOWN = 8000;
 
     protected abstract boolean checkHitPedestrian ();
 
@@ -184,7 +184,6 @@ public abstract class Vehicle extends SuperSmoothMover
                     speed = 0;
                 }
                 else if(cooldown.millisElapsed() >= CHANGE_LANE_COOLDOWN){
-                    System.out.println(cooldown.millisElapsed());
                      if(checkLaneChange(direction,myLaneNumber).equals("Below")){
                         setLocation(getX(),getY()+48);
                         myLaneNumber++;
