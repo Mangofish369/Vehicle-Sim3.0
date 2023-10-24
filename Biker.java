@@ -10,7 +10,7 @@ public class Biker extends Pedestrian
         }
         GreenfootImage biker = getImage();
         biker.scale(40,60);
-        maxSpeed = Math.random() * 2 + 3;
+        maxSpeed = Math.random() * 2 + 4;
         speed = maxSpeed;
     }
     public void act()
