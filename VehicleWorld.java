@@ -71,10 +71,10 @@ public class VehicleWorld extends World
     StopLine rightToLeft = new StopLine();
 
     
-    
-    public static final int RED_LIGHT_DURATION = 300;
-    public static final int YELLOW_LIGHT_DURATION = 100;
-    public static final int GREEN_LIGHT_DURATION = 1000;
+    private int nextChangeLightAct;
+    private int RED_LIGHT_DURATION;
+    private int YELLOW_LIGHT_DURATION;
+    private int GREEN_LIGHT_DURATION;
     
     SimpleTimer changeLightTime = new SimpleTimer();
     
@@ -139,6 +139,11 @@ public class VehicleWorld extends World
         addObject(bottom,650,200);
         addObject(top,350,700);
         
+        nextChangeLightAct = 360;
+        RED_LIGHT_DURATION = 360;
+        YELLOW_LIGHT_DURATION = 180;
+        GREEN_LIGHT_DURATION = 480;
+        
         addObject(pointer, -10,-10);
         
         addObject(leftToRight, 400,560);
@@ -147,6 +152,7 @@ public class VehicleWorld extends World
 
     public void act () {
         actCount++;
+        changeTraffic();
         if(crime){
             timer++;
         }
@@ -167,6 +173,7 @@ public class VehicleWorld extends World
                     double speed = car.getSpeed();
                     if(speed > 4){
                         crime = true;
+                        car.setCrime(true);
                         speedingLane.offer(lane);
                     }
                 } else if (vehicleType == 1){
@@ -192,17 +199,34 @@ public class VehicleWorld extends World
             int xSpawnLocation = Greenfoot.getRandomNumber (150) + 430; // random between 99 and 699, so not near edges
             boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
             int pedestrianType = Greenfoot.getRandomNumber(2);
-            if (spawnAtTop){
-                if(pedestrianType == 0){
-                    addObject(new Walker(1), xSpawnLocation, TOP_SPAWN);
-                } else if (pedestrianType == 1) {
-                    addObject (new Biker (1), xSpawnLocation, TOP_SPAWN);
-                }
-            } else {
-                if (pedestrianType == 0){
-                    addObject(new Walker (-1), xSpawnLocation, BOTTOM_SPAWN);
-                } else if (pedestrianType == 1){
-                    addObject(new Biker (-1), xSpawnLocation, BOTTOM_SPAWN);
+            int spawnChance = Greenfoot.getRandomNumber(1000);
+            boolean spawn = true;
+            if(checkLight().equals("red")){
+                if(spawnChance <= 500){
+                    spawn = true;
+                } else{
+                    spawn = false;
+                } 
+            } else if (checkLight().equals("green")){
+               if(spawnChance <= 100){
+                    spawn = true;
+                } else{
+                    spawn = false;
+                }  
+            }
+            if(spawn){
+                if (spawnAtTop){
+                    if(pedestrianType == 0){
+                        addObject(new Walker(1), xSpawnLocation, TOP_SPAWN);
+                    } else if (pedestrianType == 1) {
+                        addObject (new Biker (1), xSpawnLocation, TOP_SPAWN);
+                    }
+                } else {
+                    if (pedestrianType == 0){
+                        addObject(new Walker (-1), xSpawnLocation, BOTTOM_SPAWN);
+                    } else if (pedestrianType == 1){
+                        addObject(new Biker (-1), xSpawnLocation, BOTTOM_SPAWN);
+                    }
                 }
             }
         }
@@ -216,11 +240,30 @@ public class VehicleWorld extends World
         }
     }
     
+    
+    public void changeTraffic(){
+        if(actCount >= nextChangeLightAct){
+            String light = checkLight();
+            if(light.equals("green")){
+                top.changeLight();
+                bottom.changeLight();
+                nextChangeLightAct += YELLOW_LIGHT_DURATION;
+            } else if (light.equals("yellow")){
+                top.changeLight();
+                bottom.changeLight();
+                nextChangeLightAct += RED_LIGHT_DURATION;
+            } else if (light.equals("red")){
+                top.changeLight();
+                bottom.changeLight();
+                nextChangeLightAct += GREEN_LIGHT_DURATION;
+            }
+        }
+    }
+    
     public String checkLight(){
         String light = top.getColour();
         return light;
     }
-    
 
     /**
      *  Given a lane number (zero-indexed), return the y position

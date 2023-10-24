@@ -20,6 +20,9 @@ public abstract class Vehicle extends SuperSmoothMover
     protected boolean isRaining;
     SimpleTimer cooldown;
     public static final int CHANGE_LANE_COOLDOWN = 8000;
+    protected boolean crime;
+    protected GreenfootSound[] beepSounds;
+    protected int beepSoundsIndex;
 
     protected abstract boolean checkHitPedestrian ();
 
@@ -48,6 +51,14 @@ public abstract class Vehicle extends SuperSmoothMover
         isRaining = false;
         
         cooldown = new SimpleTimer();
+        
+        crime = false;
+        
+        beepSoundsIndex = 0;
+        beepSounds = new GreenfootSound[20];
+        for(int i = 0; i < beepSounds.length; i++){
+            beepSounds[i] = new GreenfootSound("carBeep.wav");
+        }
     }
 
     /**
@@ -158,9 +169,12 @@ public abstract class Vehicle extends SuperSmoothMover
         // Ahead is a generic vehicle - we don't know what type BUT
         // since every Vehicle "promises" to have a getSpeed() method,
         // we can call that on any vehicle to find out it's speed
-        Vehicle ahead = (Vehicle) getOneObjectAtOffset (direction * (int)(speed + getImage().getWidth()/2 + 6), 0, Vehicle.class);
+        Vehicle ahead = (Vehicle) getOneObjectAtOffset (direction * (int)(speed + getImage().getWidth()/2 + 8), 0, Vehicle.class);
         double otherVehicleSpeed = -1;
-        checkTrafficLight();
+        
+        if(!crime){
+            checkTrafficLight();
+        }
         if(!moving){
             speed = 0;
         }
@@ -183,16 +197,18 @@ public abstract class Vehicle extends SuperSmoothMover
                 if(otherVehicleSpeed == 0){
                     speed = 0;
                 }
-                else if(cooldown.millisElapsed() >= CHANGE_LANE_COOLDOWN){
+                else if(crime || cooldown.millisElapsed() >= CHANGE_LANE_COOLDOWN){
                      if(checkLaneChange(direction,myLaneNumber).equals("Below")){
                         setLocation(getX(),getY()+48);
                         myLaneNumber++;
                         cooldown.mark();
+                        playBeepSound();
                     }
                     else if(checkLaneChange(direction,myLaneNumber).equals("Above")){
                         setLocation(getX(),getY()-48);
                         myLaneNumber--;
                         cooldown.mark();
+                        playBeepSound();
                     }
                 }
                 else{
@@ -302,6 +318,13 @@ public abstract class Vehicle extends SuperSmoothMover
         return false;
     }
     
+    public void playBeepSound(){
+        beepSounds[beepSoundsIndex].play();
+        beepSoundsIndex++;
+        if(beepSoundsIndex > beepSounds.length -1){
+            beepSoundsIndex = 0;
+        }
+    }
     public void slowDown(){
         speed = getSpeed();
         speed = speed * 0.7;
@@ -327,6 +350,10 @@ public abstract class Vehicle extends SuperSmoothMover
     
     public void setIsRaining(boolean isItRaining){
         isRaining = isItRaining;
+    }
+    
+    public void setCrime(boolean isGuilty){
+        crime = isGuilty;
     }
     
 }
