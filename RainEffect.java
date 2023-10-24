@@ -12,7 +12,7 @@ public class RainEffect extends Effect
     private boolean turnedAround;
     
     public RainEffect(){
-        actsLeft = 300;
+        actsLeft = 360;
         speed = 1;
         turnedAround = false;
     }

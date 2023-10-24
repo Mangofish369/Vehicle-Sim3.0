@@ -15,10 +15,13 @@ public class Police extends Vehicle
     public Police (VehicleSpawner origin){
         super(origin);
         
-        maxSpeed = 2.5;
+        maxSpeed = 2.0 + ((Math.random() * 30)/5);
         speed = maxSpeed;
         
+        //yOffset = 10;
+        
         GreenfootImage police = getImage();
+        //police.scale(160,60);
         police.scale(100,50);
     }
     public void act()
@@ -34,4 +37,5 @@ public class Police extends Vehicle
         }
         return false;
     }
+    
 }

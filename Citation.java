@@ -10,7 +10,15 @@ public abstract class Citation
      * 
      * Image of white line
      * https://www.citypng.com/photo/17303/horizontal-white-line
+     * 
+     * Image of police car
+     * https://www.dreamstime.com/modern-army-truck-police-car-pixel-game-design-military-technics-force-heavy-equipment-modern-army-truck-police-car-image213411909
      */
     
+    /* Sound effects
+     * 
+     * Car honking: https://www.youtube.com/watch?v=pNoGHcIHzYo
+     * 
+     */
     
 }
