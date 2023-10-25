@@ -1,31 +1,79 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-import java.util.Collections;
-import java.util.ArrayList; //hello
+import java.util.Collections; //helloooo!!
+import java.util.ArrayList; 
 import java.util.Queue;
 import java.util.LinkedList;
 /**
- * <h1>The new and vastly improved 2022 Vehicle Simulation Assignment.</h1>
- * <p> This is the first redo of the 8 year old project. Lanes are now drawn dynamically, allowing for
- *     much greater customization. Pedestrians can now move in two directions. The graphics are better
- *     and the interactions smoother.</p>
- * <p> The Pedestrians are not as dumb as before (they don't want straight into Vehicles) and the Vehicles
- *     do a somewhat better job detecting Pedestrians.</p>
+ * Welcome to the traffic simulation; Created by Vincent Li, October 25, 2023
  * 
- * Version Notes - Feb 2023
- * --> Includes grid <--> lane conversion method
- * --> Now starts with 1-way, 5 lane setup (easier)
+ * Within the 8 lanes, cars and pedestrians generally follow traffic control for smooth driving.
+ * However every so often, a speed freak (we all know so well) may spawn, ignoring all traffic rules and running over red lights.
+ * This promonts a police car to chase after the speed freak, and ironiclly the police will also break all the rules in order to 
+ * catch this car.
  * 
- * V2023_021
- * --> Improved Vehicle Repel (still work in progress)
- * --> Implemented Z-sort, disabled paint order between Pedestrians and Vehicles (looks much better now)
- * --> Implemented lane-based speed modifiers for max speed
+ * To add some visual elements, rain will occur every 10 - 16 sec, and slow down all vehicles briefly 
+ * Traffic lights change automatically, the time period is set to allow some clutter of vehicles and pedestrains. 
+ * Cars will change lanes modestly if they feel the need to, speeding cars and police will violently change lanes to ensure they
+ * maintain as much speed as possible.
+ * 
+ * Side note: A mouse pointer is also created for you!
+ *               --> To find the coordinates of your mouse press 'n'
  * 
  * 
- * Commands
- * w --> switch red light
- * e --> switch to green light
+ * Credits:
+ * -----------------------------------Art work-----------------------------------
  * 
- * n --> print coordinates of mouse location
+ * Image of Biker
+ * - Designed by: flatvectors
+ * - Found on: Adobe Stock.com
+ * https://stock.adobe.com/ca/search/images?filters%5Bcontent_type%3Aphoto%5D=1&filters%5Bcontent_type%3Aillustration%5D=1&filters%5Bcontent_type%3Azip_vector%5D=1&filters%5Bcontent_type%3Avideo%5D=0&filters%5Bcontent_type%3Atemplate%5D=0&filters%5Bcontent_type%3A3d%5D=0&filters%5Bcontent_type%3Aaudio%5D=0&filters%5Binclude_stock_enterprise%5D=0&filters%5Bis_editorial%5D=0&filters%5Bfree_collection%5D=0&order=relevance&serie_id=493870822&asset_id=364064825
+ * 
+ * Image of Traffic Lights
+ * - Designed by: bubaone
+ * - Found on: iStock.com
+ * https://www.istockphoto.com/vector/led-modern-street-traffic-lights-background-gm165818773-18626367
+ * 
+ * Image of white line
+ * - Author Unknown
+ * - Found on: CITYPNG.com
+ * https://www.citypng.com/photo/17303/horizontal-white-line
+ * 
+ * Image of police car
+ * - Designed by: Topgeek
+ * - Found on: Dreamstime.com
+ * https://www.dreamstime.com/modern-army-truck-police-car-pixel-game-design-military-technics-force-heavy-equipment-modern-army-truck-police-car-image213411909
+ * 
+ * 
+ * -----------------------------------Code-----------------------------------
+ * Simple Timer Class:
+ * - Designed by: Neil Brown
+ * - Downloaded from: Greenfoot ide
+ * 
+ * World & Actor Class:
+ * - Found on Greenfoot
+ * 
+ * Vehicle Similation Starter Code:
+ * - Designed by: Jordan Cohen
+ * - Found by taking: ICS4U1-01
+ * 
+ * Additionally Borrowed from Jordan Cohen:
+ * - Storm Demo
+ * - Bus Stop Demo
+ * - Sound Demo
+ * - Sound Effects Slideshow
+ * - Collision Detection Slideshow
+ * -----------------------------------Sound-----------------------------------
+ * Car honking
+ * - Designed by: Jacob Bowerman <-- on Youtube
+ * - Downloaded on: MediaFire.com
+ * https://www.youtube.com/watch?v=pNoGHcIHzYo (Source)
+ * https://www.mediafire.com/file/bw8twrv6t9p8y1i/car_beep.wav/file (Download)
+ * 
+ * Driving in the rain
+ * - Author Unknown
+ * - Found on: mixkit.co
+ * https://mixkit.co/free-sound-effects/traffic/
+ * 
  */
 public class VehicleWorld extends World
 {
@@ -77,6 +125,9 @@ public class VehicleWorld extends World
     private int GREEN_LIGHT_DURATION;
     
     SimpleTimer changeLightTime = new SimpleTimer();
+    
+    private GreenfootSound ambience;
+    private GreenfootSound rainSound;
     
     
     /**
@@ -148,8 +199,19 @@ public class VehicleWorld extends World
         
         addObject(leftToRight, 400,560);
         addObject(rightToLeft, 600,340);
+        
+        ambience = new GreenfootSound("drivingInTheRain.mp3");
+        rainSound = new GreenfootSound("drivingInTheRain.mp3");
     }
 
+    public void started(){
+        ambience.playLoop();
+    }
+    
+    public void stopped(){
+        ambience.stop();
+    }
+    
     public void act () {
         actCount++;
         changeTraffic();
@@ -207,12 +269,18 @@ public class VehicleWorld extends World
                 } else{
                     spawn = false;
                 } 
-            } else if (checkLight().equals("green")){
+            } else if (checkLight().equals("yellow")){
                if(spawnChance <= 100){
                     spawn = true;
                 } else{
                     spawn = false;
                 }  
+            } else if (checkLight().equals("green")){
+                if(spawnChance <= 50){
+                    spawn = true;
+                } else{
+                    spawn = false;
+                }
             }
             if(spawn){
                 if (spawnAtTop){
@@ -233,6 +301,7 @@ public class VehicleWorld extends World
 
         if(actCount == nextRainEffectAct){
             addObject(new RainEffect(), 0, getHeight()/2); // Spawn rain
+            rainSound.play();
             
             int actsUntilNextStorm = Greenfoot.getRandomNumber (300) + 600; // Random delay for next spawn + minimum 10 seconds
             
@@ -240,7 +309,7 @@ public class VehicleWorld extends World
         }
     }
     
-    
+        
     public void changeTraffic(){
         if(actCount >= nextChangeLightAct){
             String light = checkLight();

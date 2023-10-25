@@ -9,6 +9,9 @@ public class Ambulance extends Vehicle
     public static final int HEAL_IMAGE_DURATION = 150;
     SimpleTimer timer = new SimpleTimer();
     HealEffect healEffect;
+    
+    protected GreenfootSound[] healSounds;
+    protected int healSoundsIndex;
     public Ambulance(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         
@@ -19,6 +22,12 @@ public class Ambulance extends Vehicle
         ambulance.scale(100,50);
         
         healEffect = new HealEffect();
+        
+        healSoundsIndex = 0;
+        healSounds = new GreenfootSound[20];
+        for(int i = 0; i < healSounds.length; i++){
+            healSounds[i] = new GreenfootSound("carBeep.wav");
+        }
     }
 
     /**
@@ -38,10 +47,19 @@ public class Ambulance extends Vehicle
         for(Pedestrian pe : peds){
             if(pe != null && !pe.isAwake()){
                 pe.healMe();
+                playHealSound();
                 getWorld().addObject(healEffect,getX(),getY());
                 timer.mark();
             }
         }
         return false;
+    }
+    
+    public void playHealSound(){
+        healSounds[healSoundsIndex].play();
+        healSoundsIndex++;
+        if(healSoundsIndex > healSounds.length -1){
+                healSoundsIndex = 0;
+        }
     }
 }
