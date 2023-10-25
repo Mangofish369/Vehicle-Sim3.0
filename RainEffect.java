@@ -15,6 +15,7 @@ public class RainEffect extends Effect
         actsLeft = 360;
         speed = 1;
         turnedAround = false;
+
     }
     
     public void addedToWorld (World w){
@@ -55,14 +56,17 @@ public class RainEffect extends Effect
         for (Vehicle v : vehicles){
             v.setIsRaining(true);
         }
-
+        
+        // If acts left hits zero, I'm finished
         if (actsLeft == 0){
             for (Vehicle v: vehicles){
                 v.setIsRaining(false);
             }
             getWorld().removeObject(this);
         }
-        // If acts left hits zero, I'm finished
+        
+        
+        
     }
 
     /**
