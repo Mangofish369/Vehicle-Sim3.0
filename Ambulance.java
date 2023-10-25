@@ -26,7 +26,7 @@ public class Ambulance extends Vehicle
         healSoundsIndex = 0;
         healSounds = new GreenfootSound[20];
         for(int i = 0; i < healSounds.length; i++){
-            healSounds[i] = new GreenfootSound("carBeep.wav");
+            healSounds[i] = new GreenfootSound("healEffect.wav");
         }
     }
 

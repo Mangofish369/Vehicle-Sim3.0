@@ -71,9 +71,13 @@ import java.util.LinkedList;
  * 
  * Driving in the rain
  * - Author Unknown
- * - Found on: mixkit.co
- * https://mixkit.co/free-sound-effects/traffic/
+ * - Found on: mixkit.co --> (called "Driving in the rain")
+ * https://mixkit.co/free-sound-effects/traffic/ 
  * 
+ * Traffic Ambience 
+ * - Author Unknown
+ * - Found on: mixkit.co --> (City traffic bus pass by)
+ * https://mixkit.co/free-sound-effects/traffic/ 
  */
 public class VehicleWorld extends World
 {
@@ -201,7 +205,7 @@ public class VehicleWorld extends World
         addObject(rightToLeft, 600,340);
         
         ambience = new GreenfootSound("drivingInTheRain.mp3");
-        rainSound = new GreenfootSound("drivingInTheRain.mp3");
+        rainSound = new GreenfootSound("cityTrafficAmbience.mp3");
     }
 
     public void started(){
