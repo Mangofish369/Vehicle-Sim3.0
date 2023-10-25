@@ -181,7 +181,7 @@ public abstract class Vehicle extends SuperSmoothMover
         }
         else {
             if(isRaining){
-                speed = speed * 0.5;
+                speed = speed * 0.7;
             } else if (isRaining == false){
                 speed = maxSpeed;
             }
