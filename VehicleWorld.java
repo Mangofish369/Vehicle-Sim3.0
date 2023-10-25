@@ -69,15 +69,27 @@ import java.util.LinkedList;
  * https://www.youtube.com/watch?v=pNoGHcIHzYo (Source)
  * https://www.mediafire.com/file/bw8twrv6t9p8y1i/car_beep.wav/file (Download)
  * 
- * Driving in the rain
+ * Raining Sound Effect
  * - Author Unknown
- * - Found on: mixkit.co --> (called "Driving in the rain")
- * https://mixkit.co/free-sound-effects/traffic/ 
+ * - Found on: envatoelements --> (called "Rain")
+ * https://elements.envato.com/rain-UPA6GE2?utm_source=mixkit&utm_medium=referral&utm_campaign=elements_mixkit_cs_sfx_tag
  * 
  * Traffic Ambience 
  * - Author Unknown
  * - Found on: mixkit.co --> (City traffic bus pass by)
  * https://mixkit.co/free-sound-effects/traffic/ 
+ * 
+ * Heal Effect
+ * - Author Unknown
+ * - Found on: soundsnap
+ * https://www.soundsnap.com/tags/heal
+ * 
+ * Red, Green, and Yellow Light Sound Effects
+ * - Uploaded by: DanielElevators (on Youtube)
+ * - Red: (Cherp EW)
+ * - Yellow: (Canadian Melody 3-Tone Clearance)
+ * - Green: (Canadian Meoldy 4-Tone Walk)
+ * https://www.youtube.com/watch?v=8lcMMK6cQJs
  */
 public class VehicleWorld extends World
 {
@@ -132,7 +144,9 @@ public class VehicleWorld extends World
     
     private GreenfootSound ambience;
     private GreenfootSound rainSound;
-    
+    private GreenfootSound redLightSound;
+    private GreenfootSound yellowLightSound;
+    private GreenfootSound greenLightSound;
     
     /**
      * Constructor for objects of class MyWorld.
@@ -204,8 +218,14 @@ public class VehicleWorld extends World
         addObject(leftToRight, 400,560);
         addObject(rightToLeft, 600,340);
         
-        ambience = new GreenfootSound("drivingInTheRain.mp3");
-        rainSound = new GreenfootSound("cityTrafficAmbience.mp3");
+        ambience = new GreenfootSound("cityTrafficAmbience.mp3");
+        rainSound = new GreenfootSound("rainSounds.mp3");
+        redLightSound = new GreenfootSound("redLightSound.mp3");
+        yellowLightSound = new GreenfootSound("yellowLightSound.mp3");
+        greenLightSound = new GreenfootSound("greenLightSound.mp3");
+        greenLightSound.setVolume(85);
+        
+        
     }
 
     public void started(){
@@ -273,13 +293,13 @@ public class VehicleWorld extends World
                 } else{
                     spawn = false;
                 } 
-            } else if (checkLight().equals("yellow")){
+            }/* else if (checkLight().equals("yellow")){
                if(spawnChance <= 100){
                     spawn = true;
                 } else{
                     spawn = false;
                 }  
-            } else if (checkLight().equals("green")){
+            } */else if (checkLight().equals("green")){
                 if(spawnChance <= 50){
                     spawn = true;
                 } else{
@@ -321,14 +341,17 @@ public class VehicleWorld extends World
                 top.changeLight();
                 bottom.changeLight();
                 nextChangeLightAct += YELLOW_LIGHT_DURATION;
+                yellowLightSound.play();
             } else if (light.equals("yellow")){
                 top.changeLight();
                 bottom.changeLight();
                 nextChangeLightAct += RED_LIGHT_DURATION;
+                redLightSound.play();
             } else if (light.equals("red")){
                 top.changeLight();
                 bottom.changeLight();
                 nextChangeLightAct += GREEN_LIGHT_DURATION;
+                greenLightSound.play(); 
             }
         }
     }

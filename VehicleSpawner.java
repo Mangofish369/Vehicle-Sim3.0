@@ -91,11 +91,11 @@ public class VehicleSpawner extends Actor
     }
 
     public boolean isTouchingVehicleOld () {
-        return this.isTouching (Car.class) || this.isTouching (Bus.class) || this.isTouching (Ambulance.class) || this.isTouching (Police.class);
+        return  this.isTouching (Police.class) || this.isTouching (Car.class) || this.isTouching (Bus.class) || this.isTouching (Ambulance.class);
     }
 
     public boolean isTouchingVehicle () {
-        return this.isTouching(Vehicle.class);
+        return this.isTouching (Police.class) || this.isTouching(Vehicle.class);
     }
 
     /**

@@ -58,7 +58,7 @@ public abstract class Vehicle extends SuperSmoothMover
         beepSounds = new GreenfootSound[20];
         for(int i = 0; i < beepSounds.length; i++){
             beepSounds[i] = new GreenfootSound("carBeep.wav");
-            beepSounds[i].setVolume(65);
+            beepSounds[i].setVolume(85);
         }
     }
 
