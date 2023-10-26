@@ -62,6 +62,9 @@ import java.util.LinkedList;
  * - Sound Demo
  * - Sound Effects Slideshow
  * - Collision Detection Slideshow
+ * 
+ * Mouse Pointer Class
+ * - Code borrowed from Stewart Chan
  * -----------------------------------Sound-----------------------------------
  * Car honking
  * - Designed by: Jacob Bowerman <-- on Youtube
@@ -90,6 +93,27 @@ import java.util.LinkedList;
  * - Yellow: (Canadian Melody 3-Tone Clearance)
  * - Green: (Canadian Meoldy 4-Tone Walk)
  * https://www.youtube.com/watch?v=8lcMMK6cQJs
+ * 
+ * -----------------------------------Bugs-----------------------------------
+ * - Police cars can spawn overlapped on another vehicle
+ *   * Ran out of time, couldn't figure out how to implement the isTouchingVehicle()
+ *   * from vehicleSpawner class to the vehicle world
+ * 
+ * - Car sometimes do get affected by Rain Effect 
+ *   * It used to work, but multiple versions later I noticed the bug (ran out of time and didn't figure it out)
+ *  
+ * - Lane change can cause cars to get stuck inbetween each other (especially speeding cars)
+ *   * When lots of car on both sides, this can cause for some weird interactions
+ *   * Attmepted to fix by adding a global cooldown, but this caused most vehicles to not lane change, so I just left the cooldown off for speeding cars
+ * 
+ * - If a vehicle has a high enough speed, they can skip over the stopline hitbox, avoiding and not colliding
+ *   *It's a "feature" for speeding cars and police cops
+ * 
+ * - If you increase the speed of the greenfoot world too much, the aoe healing VFX doesn't remove itself
+ * 
+ * -----------------------------------Commands-----------------------------------
+ * Get coordinate location of mouse
+ * --> n
  */
 public class VehicleWorld extends World
 {
@@ -134,7 +158,7 @@ public class VehicleWorld extends World
     StopLine leftToRight = new StopLine();
     StopLine rightToLeft = new StopLine();
 
-    
+    //Traffic Light Durations
     private int nextChangeLightAct;
     private int RED_LIGHT_DURATION;
     private int YELLOW_LIGHT_DURATION;
@@ -142,6 +166,7 @@ public class VehicleWorld extends World
     
     SimpleTimer changeLightTime = new SimpleTimer();
     
+    //Sound Effects
     private GreenfootSound ambience;
     private GreenfootSound rainSound;
     private GreenfootSound redLightSound;
@@ -201,23 +226,29 @@ public class VehicleWorld extends World
 
         setBackground (background);
         
+        // Add Crosswalk
         addObject(new CrossingPlatform(150,200),500,330);
         addObject(new CrossingPlatform(150,200),500,500);
         addObject(new CrossingPlatform(150,200),500,570);
         
+        // Add Traffic Lights (Top and bottom)
         addObject(bottom,650,200);
         addObject(top,350,700);
         
+        // Set controls for traffic light
         nextChangeLightAct = 360;
         RED_LIGHT_DURATION = 360;
         YELLOW_LIGHT_DURATION = 180;
         GREEN_LIGHT_DURATION = 480;
         
+        // Mouse Pointer
         addObject(pointer, -10,-10);
         
+        // Stoplines (leftToRight = bottom, rightToLeft = top)
         addObject(leftToRight, 400,560);
         addObject(rightToLeft, 600,340);
-        
+
+        // Intialize Sound Effects
         ambience = new GreenfootSound("cityTrafficAmbience.mp3");
         rainSound = new GreenfootSound("rainSounds.mp3");
         redLightSound = new GreenfootSound("redLightSound.mp3");
@@ -227,11 +258,13 @@ public class VehicleWorld extends World
         
         
     }
-
-    public void started(){
+    
+    // Start ambience music when run is pressed
+    public void started(){ 
         ambience.playLoop();
     }
     
+    // Stop ambience music
     public void stopped(){
         ambience.stop();
     }
@@ -257,7 +290,9 @@ public class VehicleWorld extends World
                     Car car = new Car(laneSpawners[lane]);
                     addObject(car,0,0);
                     double speed = car.getSpeed();
-                    if(speed > 4){
+                    
+                    //If a car is speeding, add it to queue so a police car can spawn
+                    if(speed > 4){ 
                         crime = true;
                         car.setCrime(true);
                         speedingLane.offer(lane);
@@ -267,6 +302,8 @@ public class VehicleWorld extends World
                 } else if (vehicleType == 2){
                     addObject(new Ambulance(laneSpawners[lane]), 0, 0);
                 } 
+                
+                // Police Car Spawner
                 if (crime == true){
                     if(timer >= DELAY_SPAWN_DURATION){
                         while(!speedingLane.isEmpty()){
@@ -287,19 +324,16 @@ public class VehicleWorld extends World
             int pedestrianType = Greenfoot.getRandomNumber(2);
             int spawnChance = Greenfoot.getRandomNumber(1000);
             boolean spawn = true;
-            if(checkLight().equals("red")){
+            
+            // Pedestrian spawn chance is determined by traffic light status
+            // Red light for cars means more pedestrians can cross safely, green light means fewer pedestrians should cross
+            if(checkLight().equals("red")){ 
                 if(spawnChance <= 500){
                     spawn = true;
                 } else{
                     spawn = false;
                 } 
-            }/* else if (checkLight().equals("yellow")){
-               if(spawnChance <= 100){
-                    spawn = true;
-                } else{
-                    spawn = false;
-                }  
-            } */else if (checkLight().equals("green")){
+            }else if (checkLight().equals("green")){
                 if(spawnChance <= 50){
                     spawn = true;
                 } else{
@@ -322,7 +356,8 @@ public class VehicleWorld extends World
                 }
             }
         }
-
+        
+        // Control block for adding Global Effect: Rain
         if(actCount == nextRainEffectAct){
             addObject(new RainEffect(), 0, getHeight()/2); // Spawn rain
             rainSound.play();
@@ -333,7 +368,7 @@ public class VehicleWorld extends World
         }
     }
     
-        
+    // Control System for Automatic Traffic Lights
     public void changeTraffic(){
         if(actCount >= nextChangeLightAct){
             String light = checkLight();
@@ -356,11 +391,11 @@ public class VehicleWorld extends World
         }
     }
     
-    public String checkLight(){
+        public String checkLight(){
         String light = top.getColour();
         return light;
     }
-
+    
     /**
      *  Given a lane number (zero-indexed), return the y position
      *  in the centre of the lane. (doesn't factor offset, so 
@@ -494,6 +529,8 @@ public class VehicleWorld extends World
     public static void zSort (ArrayList<Actor> actorsToSort, World world){
         ArrayList<ActorContent> acList = new ArrayList<ActorContent>();
         // Create a list of ActorContent objects and populate it with all Actors sent to be sorted
+        
+        // Make sure CrossingPlatform and StopLine are not affected by Z-Sort and stay on the top
         for (Actor a : actorsToSort){
             if(!(a instanceof CrossingPlatform || a instanceof StopLine)){
                 acList.add (new ActorContent (a, a.getX(), a.getY()));

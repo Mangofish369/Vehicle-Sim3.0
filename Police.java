@@ -1,17 +1,16 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class truck here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * The Police Class
+ * Only spawns when a speeding car is detected
+ * After a short duration, police will spawn in all lanes that had a speeder to try and chase it
  */
 public class Police extends Vehicle
 {
     public Police (VehicleSpawner origin){
         super(origin);
         
-        maxSpeed = 2.0 + ((Math.random() * 30)/5);
+        maxSpeed = 2.0 + ((Math.random() * 30)/5); // Police cars have high speeds
         speed = maxSpeed;
         
         GreenfootImage police = getImage();

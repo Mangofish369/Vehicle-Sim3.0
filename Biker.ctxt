@@ -2,6 +2,7 @@
 comment0.target=Biker
 comment1.params=direction
 comment1.target=Biker(int)
+comment1.text=\r\n\ This\ is\ the\ Biker\ Class\r\n\ -\ The\ key\ difference\ is\ that\ bikers\ are\ much\ faster\ than\ walkers\!\ Buses\ also\ do\ not\ pick\ them\ up.\r\n
 comment2.params=
 comment2.target=void\ act()
 numComments=3

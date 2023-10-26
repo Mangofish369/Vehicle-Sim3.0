@@ -1,7 +1,9 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * A Pedestrian that tries to walk across the street
+ * A Pedestrian Super Class That Controls the behaviours of all pedestrians
+ * - All pedestrians can be knocked down, healed, and have a direction
+ * - This class is mainly borrowed from the Starter Vehicle Simulation 
  */
 public abstract class Pedestrian extends SuperSmoothMover
 {

@@ -4,6 +4,15 @@ import java.util.List;
 
 /**
  * This is the superclass for Vehicles.
+ * All vehicles can: drive, change lanes, stop, slowdown, and most of them obey traffic rules
+ * 
+ * Vehicles generally do not change lanes often (internal cooldown), 
+ * But when they do, vheicles make a beep sound
+ * 
+ * Vehicles know how to read traffic lights, and when it is raining
+ * Plus the try their best to not run over pedestrians
+ * 
+ * Most of the Vehicle class is borrowed from the Vehicle Starter Code
  * 
  */
 public abstract class Vehicle extends SuperSmoothMover
@@ -17,14 +26,14 @@ public abstract class Vehicle extends SuperSmoothMover
     protected VehicleSpawner origin;
     protected int followingDistance;
     protected int myLaneNumber;
-    protected boolean isRaining;
-    SimpleTimer cooldown;
-    public static final int CHANGE_LANE_COOLDOWN = 8000;
-    protected boolean crime;
+    protected boolean isRaining; 
+    SimpleTimer cooldown; // Internal cool down timer for lane change
+    public static final int CHANGE_LANE_COOLDOWN = 8000; // Cool down value for lane change
+    protected boolean crime; // Boolean if car is involved in speeding
     protected GreenfootSound[] beepSounds;
     protected int beepSoundsIndex;
 
-    protected abstract boolean checkHitPedestrian ();
+    protected abstract boolean checkHitPedestrian (); // A vehicles interact with pedestrians when they collide
 
     public Vehicle (VehicleSpawner origin) {
         // remember the VehicleSpawner I came from. This includes information
@@ -173,32 +182,33 @@ public abstract class Vehicle extends SuperSmoothMover
         Vehicle ahead = (Vehicle) getOneObjectAtOffset (direction * (int)(speed + getImage().getWidth()/2 + 8), 0, Vehicle.class);
         double otherVehicleSpeed = -1;
         
-        if(!crime){
+        // Check if it is a speeding car, all vehicles except speeding ones follow traffic rules
+        if(!crime){ 
             checkTrafficLight();
         }
+        
         if(!moving){
             speed = 0;
         }
         else {
+            // If Global Effect is happening, slowdown, else maintain speed
             if(isRaining){
                 speed = speed * 0.7;
-            } else if (isRaining == false){
+            } else if (!isRaining){
                 speed = maxSpeed;
             }
+            
+            // Get Speed of vehicle infront
             if (ahead != null) {
                 otherVehicleSpeed = ahead.getSpeed();
             }
-    
-            // Various things that may slow down driving speed 
-            // You can ADD ELSE IF options to allow other 
-            // factors to reduce driving speed.
             
-            //Lane Change needs a cooldown
+            //If the vehicle in front is slower than ours, decide if we should lane change or not
             if (otherVehicleSpeed >= 0 && otherVehicleSpeed < maxSpeed){ // Vehicle ahead is slower?
-                if(otherVehicleSpeed == 0){
+                if(otherVehicleSpeed == 0){ 
                     speed = 0;
                 }
-                else if(cooldown.millisElapsed() >= CHANGE_LANE_COOLDOWN){
+                else if(crime || cooldown.millisElapsed() >= CHANGE_LANE_COOLDOWN){
                      if(checkLaneChange(direction,myLaneNumber).equals("Below")){
                         setLocation(getX(),getY()+48);
                         myLaneNumber++;
@@ -213,15 +223,16 @@ public abstract class Vehicle extends SuperSmoothMover
                     }
                 }
                 else{
-                    speed = otherVehicleSpeed;
+                    speed = otherVehicleSpeed; // If no lane change, slowdown and match the speed of the car infront
                 }
             } else if (moving){
                 speed = maxSpeed; // nothing impeding speed, so go max speed
             }
         }
-        move (speed * direction);
+        move (speed * direction); // nothing else to do, just keep driving forward
     }
     
+    // Method to check if the global effect has occured/still happening
     public void checkIsRaining(){
         if(isRaining){
             moving = false;
@@ -231,11 +242,15 @@ public abstract class Vehicle extends SuperSmoothMover
         }
     }
         
+    // Method to read the colour of the traffic light
     public void checkTrafficLight(){
         StopLine s = (StopLine)getOneObjectAtOffset((int)direction*((int)speed + getImage().getWidth()/2), 0, StopLine.class);
+        // If you are infront of a stopline, check the traffic light
         if (s != null){
+            //  Get the status of the nearest trafficlight
             if(!getObjectsInRange(500,TrafficLights.class).isEmpty()){
                 TrafficLights lights = (TrafficLights)getObjectsInRange(300,TrafficLights.class).get(0);
+                
                 if(lights.getColour().equals("red")){
                     moving = false;
                 } else {
@@ -243,13 +258,16 @@ public abstract class Vehicle extends SuperSmoothMover
                 }
             }
         } else{
-            moving = true;
+            moving = true; // If not infront of stopline, keep going
         }
     }
     
+    // Control structure to evaluate whether or not to change lanes
     public String checkLaneChange(int theDirection, int laneNum){
         if(theDirection == -1){
-            if(laneNum == 0){
+            // Check edge cases for cars in Lane (0,3,5,7) <-- (Valid for 8 lanes, not dynamically programmed)
+            
+            if(laneNum == 0){ 
                 if(isLaneBelowOpen()){
                     return "Below";
                 }
@@ -297,38 +315,38 @@ public abstract class Vehicle extends SuperSmoothMover
         return "No";
     }
     
+    // Methods to determine if a certain lane is open
     public boolean isLaneAboveOpen(){
-        HitBox hitbox = new HitBox(0,0,getImage().getWidth(),getImage().getHeight());
+        // Spawn hitbox
+        HitBox hitbox = new HitBox(0,0,getImage().getWidth(),getImage().getHeight()); 
         getWorld().addObject(hitbox,getX(),getY()-48);
         if(!hitbox.checkHitVehicle() && !hitbox.checkHitPedestrian()){
-            getWorld().removeObject(hitbox);
+            getWorld().removeObject(hitbox); // remove hitbox
             return true;
         }
-        getWorld().removeObject(hitbox);
+        getWorld().removeObject(hitbox); // remove hitbox
         return false;
     }
     
     public boolean isLaneBelowOpen(){
+        // Spawn hitbox
         HitBox hitbox = new HitBox(0,0,getImage().getWidth(),getImage().getHeight());
         getWorld().addObject(hitbox,getX(),getY()+48);
         if(!hitbox.checkHitVehicle() && !hitbox.checkHitPedestrian()){
-            getWorld().removeObject(hitbox);
+            getWorld().removeObject(hitbox); // Remove hitbox
             return true;
         }
-        getWorld().removeObject(hitbox);
+        getWorld().removeObject(hitbox); // Remove hitbox
         return false;
     }
     
+    //Method for playing sound effects when changing lane
     public void playBeepSound(){
         beepSounds[beepSoundsIndex].play();
         beepSoundsIndex++;
         if(beepSoundsIndex > beepSounds.length -1){
             beepSoundsIndex = 0;
         }
-    }
-    public void slowDown(){
-        speed = getSpeed();
-        speed = speed * 0.7;
     }
 
     /**

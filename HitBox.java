@@ -1,10 +1,8 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class HitBox here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Hit Box Subclass
+ * - Instances of hitboxes are spawned by cars to determine if they can switch lanes
  */
 public class HitBox extends Actor
 {
@@ -12,22 +10,19 @@ public class HitBox extends Actor
     private int height;
     GreenfootImage hitbox;
     
-    /**
-     * Act - do whatever the HitBox wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    // Spawn an invisible rectanglular hitbox with the dimensions given by the car
     public HitBox(int x_cord, int y_cord,int width, int height){
         this.width = width;
         this.height = height;
-        hitbox = new GreenfootImage (width,height);
-        hitbox.setColor(Color.RED);
-        hitbox.fill();   
+        hitbox = new GreenfootImage (width,height);  
         hitbox.drawRect(x_cord,y_cord,width, height);
     }
     public void act()
     {
         // Add your action code here.
     }
+    
+    // Check if anything is touching the hitbox to determine if it is safe to change lanes
     public boolean checkHitVehicle(){
         if(isTouching(Vehicle.class)){
             return true;

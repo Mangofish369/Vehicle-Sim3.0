@@ -1,6 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 public class Effect extends SuperSmoothMover
+/*
+ * The Effect class is used to help VFX fade in and out
+ * - Borrowed from Mr.Cohen's Sandstorm effect demo
+ */
 {
     protected GreenfootImage image;
     

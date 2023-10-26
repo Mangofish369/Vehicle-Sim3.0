@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Pedestrian
-comment0.text=\r\n\ A\ Pedestrian\ that\ tries\ to\ walk\ across\ the\ street\r\n
+comment0.text=\r\n\ A\ Pedestrian\ Super\ Class\ That\ Controls\ the\ behaviours\ of\ all\ pedestrians\r\n\ -\ All\ pedestrians\ can\ be\ knocked\ down,\ healed,\ and\ have\ a\ direction\r\n\ -\ This\ class\ is\ mainly\ borrowed\ from\ the\ Starter\ Vehicle\ Simulation\ \r\n
 comment1.params=direction
 comment1.target=Pedestrian(int)
 comment2.params=

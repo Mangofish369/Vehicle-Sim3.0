@@ -3,12 +3,19 @@ import java.util.ArrayList;
 
 /**
  * The Bus subclass
+ * It can pickup walkers and run over bikers
+ * 
+ * Mostly borrowed from Vehicle Simulation Starter Code
  */
 public class Bus extends Vehicle
 {
-    public static final int STOP_DURATION = 1000;
-    SimpleTimer stop;
-    ArrayList <Pedestrian> hitbox; 
+    public static final int STOP_DURATION = 1000; // Stop duration (in ms) for pickup
+    SimpleTimer stop; // Timer for stop duration
+    
+    // Arraylist for collison detection hitbox
+    // Not to be confused with lane change hitbox
+    ArrayList <Pedestrian> hitbox;
+    
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         
@@ -23,10 +30,6 @@ public class Bus extends Vehicle
         hitbox = new ArrayList <Pedestrian>();
     }
 
-    /**
-     * Act - do whatever the Bus wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
     public void act()
     {
         if(moving){
@@ -39,6 +42,8 @@ public class Bus extends Vehicle
         }
         
     }
+    
+    // Different y-offset collision detection points for the bus
     public void generateHitbox(){
         Pedestrian pFront = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Pedestrian.class);
         Pedestrian pTop = (Pedestrian)getOneObjectAtOffset(-4+(int)speed + getImage().getWidth()/2, getImage().getHeight()/2, Pedestrian.class);
@@ -51,6 +56,8 @@ public class Bus extends Vehicle
             hitbox.add(pBottom);
         }
     }
+    
+    // Loop through the array of hitboxes to determine if collision occured
     public boolean checkHitPedestrian(){
         for(Pedestrian p : hitbox){
             if(p!= null && p.isAwake()){
@@ -65,24 +72,6 @@ public class Bus extends Vehicle
                     return true;
                 } 
             }
-        }
-        return false;
-    }
-    public boolean multicollision () {
-        Pedestrian p = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Pedestrian.class);
-        Walker w = (Walker)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Walker.class);
-        Biker b = (Biker)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Biker.class);
-        if( p!= null && p.isAwake()){
-            if(w != null){
-                getWorld().removeObject(p);
-                moving = false;
-                stop.mark();
-                return true;
-            }
-            else if(b!= null){
-                p.knockDown();
-            }
-            return true; 
         }
         return false;
     }

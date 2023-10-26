@@ -3,12 +3,14 @@ import java.util.ArrayList;
 
 /**
  * The Ambulance subclass
+ * Ambulances have aoe healing effects to ensure no pedestrian is left behind (Local Collision)
+ * - Great for mass healing
  */
 public class Ambulance extends Vehicle
 {
-    public static final int HEAL_IMAGE_DURATION = 150;
+    public static final int HEAL_IMAGE_DURATION = 150; // VFX duration for healing circle
     SimpleTimer timer = new SimpleTimer();
-    HealEffect healEffect;
+    private HealEffect healEffect;
     
     protected GreenfootSound[] healSounds;
     protected int healSoundsIndex;
@@ -36,15 +38,18 @@ public class Ambulance extends Vehicle
      */
     public void act()
     {
+        // After a brief duration remove the healing VFX
         if(timer.millisElapsed() >= HEAL_IMAGE_DURATION){
             getWorld().removeObject(healEffect);    
         }
         super.act();
     }
-
+    
+    // Check if any pedestrains nearby are knocked down (Local Collision)
     public boolean checkHitPedestrian () {
         ArrayList<Pedestrian> peds = (ArrayList<Pedestrian>)getObjectsInRange(100,Pedestrian.class);
         for(Pedestrian pe : peds){
+            // If pedestrian is knocked down, heal them
             if(pe != null && !pe.isAwake()){
                 pe.healMe();
                 playHealSound();
@@ -55,6 +60,7 @@ public class Ambulance extends Vehicle
         return false;
     }
     
+    // Method for SFX
     public void playHealSound(){
         healSounds[healSoundsIndex].play();
         healSoundsIndex++;

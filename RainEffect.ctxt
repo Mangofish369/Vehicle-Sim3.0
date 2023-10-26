@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=RainEffect
-comment0.text=\r\n\ Will\ rain\ and\ cause\ downpour\r\n\ \r\n\ Rain\ causes\ cars\ to\ slow\ down\ (so\ they\ can\ avoid\ driving\ accidents)\r\n
+comment0.text=\r\n\ The\ Global\ Effect\:\ Rain\r\n\ -\ Rain\ causes\ cars\ to\ slow\ down,\ and\ generates\ a\ visual\ aspect\r\n\ -\ Code\ for\ visual\ effects\ is\ borrowed\ from\ Mr.Cohen's\ Library\ of\ Useful\ Greenfoot\ Code\r\n
 comment1.params=
 comment1.target=RainEffect()
 comment2.params=w

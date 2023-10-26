@@ -2,6 +2,7 @@
 comment0.target=Pointer
 comment1.params=
 comment1.target=Pointer()
+comment1.text=\r\n\ A\ mouse\ pointer\ class\r\n\ -\ This\ class\ is\ borrowed\ from\ Sterwart\ Chan\ \r\n\ -\ Useful\ for\ getting\ coordinates\ on\ the\ world\r\n
 comment2.params=
 comment2.target=void\ act()
 comment3.params=

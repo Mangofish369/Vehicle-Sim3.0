@@ -95,7 +95,7 @@ public class VehicleSpawner extends Actor
     }
 
     public boolean isTouchingVehicle () {
-        return this.isTouching (Police.class) || this.isTouching(Vehicle.class);
+        return this.isTouching(Vehicle.class);
     }
 
     /**

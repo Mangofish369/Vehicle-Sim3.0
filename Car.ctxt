@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Car
-comment0.text=\r\n\ The\ Car\ subclass\r\n
+comment0.text=\r\n\ The\ Car\ subclass\r\n\ Cars\ are\ generally\ quite\ fasat,\ sometimes\ they\ can\ spawn\ as\ speedsters\r\n\ When\ their\ speed\ is\ over\ 4,\ a\ police\ will\ try\ to\ chase\ down\ the\ speeding\ offender\r\n
 comment1.params=origin
 comment1.target=Car(VehicleSpawner)
 comment2.params=

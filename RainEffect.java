@@ -1,9 +1,9 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
- * Will rain and cause downpour
- * 
- * Rain causes cars to slow down (so they can avoid driving accidents)
+ * The Global Effect: Rain
+ * - Rain causes cars to slow down, and generates a visual aspect
+ * - Code for visual effects is borrowed from Mr.Cohen's Library of Useful Greenfoot Code
  */
 public class RainEffect extends Effect
 {
@@ -51,7 +51,8 @@ public class RainEffect extends Effect
 
         
         setLocation (getX() + speed, getY());
-
+        
+        // Get all vehicles on the world and modify them
         ArrayList<Vehicle> vehicles = (ArrayList<Vehicle>)getWorld().getObjects(Vehicle.class);
         for (Vehicle v : vehicles){
             v.setIsRaining(true);
@@ -64,11 +65,9 @@ public class RainEffect extends Effect
             }
             getWorld().removeObject(this);
         }
-        
-        
-        
     }
-
+    
+    // This Section is borrowed from Mr.Cohen (Begins Here)
     /**
      * density should be 1-100. 100 will be almost completely white
      */
@@ -117,4 +116,5 @@ public class RainEffect extends Effect
 
         return temp;
     }
+    // This Section is borrowed from Mr.Cohen (Ends Here)
 }

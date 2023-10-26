@@ -2,6 +2,7 @@
 comment0.target=CrossingPlatform
 comment1.params=length\ width
 comment1.target=CrossingPlatform(int,\ int)
+comment1.text=\r\n\ Crossing\ Platform\ Subclass\r\n\ -\ Used\ to\ modify\ visual\ elements\ of\ the\ crossing\ platform\r\n
 comment2.params=
 comment2.target=void\ act()
 numComments=3

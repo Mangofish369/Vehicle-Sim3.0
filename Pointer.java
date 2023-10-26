@@ -2,7 +2,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 public class Pointer extends Actor
 {
-    
+    /*
+     * A mouse pointer class
+     * - This class is borrowed from Sterwart Chan 
+     * - Useful for getting coordinates on the world
+     */
     public Pointer(){
         GreenfootImage image = new GreenfootImage(20, 20);
         image.fillOval(0, 0, 20,20);

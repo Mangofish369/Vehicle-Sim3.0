@@ -1,6 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 public class StopLine extends Actor
+/*
+ * StopLine Class 
+ * - Used to modifiy the apperance of the stopline
+ */
 {   
     private TrafficLights trafficLight;
     

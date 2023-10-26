@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Police
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ truck\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ The\ Police\ Class\r\n\ Only\ spawns\ when\ a\ speeding\ car\ is\ detected\r\n\ After\ a\ short\ duration,\ police\ will\ spawn\ in\ all\ lanes\ that\ had\ a\ speeder\ to\ try\ and\ chase\ it\r\n
 comment1.params=origin
 comment1.target=Police(VehicleSpawner)
 comment2.params=
