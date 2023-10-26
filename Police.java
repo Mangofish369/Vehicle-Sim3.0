@@ -14,11 +14,7 @@ public class Police extends Vehicle
         maxSpeed = 2.0 + ((Math.random() * 30)/5);
         speed = maxSpeed;
         
-        
-        //yOffset = 10;
-        
         GreenfootImage police = getImage();
-        //police.scale(160,60);
         police.scale(100,50);
         
     }

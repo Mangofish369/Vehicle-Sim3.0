@@ -198,7 +198,7 @@ public abstract class Vehicle extends SuperSmoothMover
                 if(otherVehicleSpeed == 0){
                     speed = 0;
                 }
-                else if(crime || cooldown.millisElapsed() >= CHANGE_LANE_COOLDOWN){
+                else if(cooldown.millisElapsed() >= CHANGE_LANE_COOLDOWN){
                      if(checkLaneChange(direction,myLaneNumber).equals("Below")){
                         setLocation(getX(),getY()+48);
                         myLaneNumber++;
